@@ -32,9 +32,9 @@ static void gpio_task_example(void* arg)
         if(xQueueReceive(gpio_evt_queue, &io_num, portMAX_DELAY)) {
             //printf("GPIO[%d] intr, val: %d\n", io_num, gpio_get_level(io_num));
         	printf("interrupt set!\n ");
-
             gpio_set_level(LEDr,0);
-            gpio_set_level(LEDy,1);
+            gpio_set_level(LEDy,0);
+            vTaskDelay(100 / portTICK_RATE_MS);
         }
     }
 }
@@ -45,7 +45,7 @@ void app_main()
 
 	gpio_set_direction(LEDr,GPIO_MODE_OUTPUT);
 	gpio_set_direction(LEDy,GPIO_MODE_OUTPUT);
-  //출력으로 설정
+
 	gpio_config_t io_conf;
     //interrupt of rising edge
     io_conf.intr_type = GPIO_PIN_INTR_NEGEDGE;
@@ -56,8 +56,7 @@ void app_main()
     //enable pull-up mode
     io_conf.pull_up_en = 1;
     gpio_config(&io_conf);
-    //스위치 입력핀 설정 스위치 회로는 풀업으로 구성 눌렀을때 인터럽트 발생함.
-    
+
     //change gpio intrrupt type for one pin
     gpio_set_intr_type(SW, GPIO_INTR_NEGEDGE);
 
@@ -79,10 +78,11 @@ void app_main()
 
     while(1) {
     	t++;
-    	vTaskDelay(1000 / portTICK_RATE_MS);
+    	vTaskDelay(100 / portTICK_RATE_MS);
         gpio_set_level(LEDr, t%2);
         gpio_set_level(LEDr, t%2);
-        gpio_set_level(LEDy,0);
+        gpio_set_level(LEDy, t%2);
+        gpio_set_level(LEDy, t%2);
 
     }
 }

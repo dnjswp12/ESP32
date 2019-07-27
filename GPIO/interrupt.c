@@ -34,7 +34,7 @@ static void gpio_task_example(void* arg)
         	printf("interrupt set!\n ");
             gpio_set_level(LEDr,0);
             gpio_set_level(LEDy,0);
-            vTaskDelay(100 / portTICK_RATE_MS);
+            vTaskDelay(1000 / portTICK_RATE_MS);
         }
     }
 }
